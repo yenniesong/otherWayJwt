@@ -13,6 +13,7 @@ import java.security.Timestamp;
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "memberId")
     private long id;
     @Column(nullable = false)
     private String email;

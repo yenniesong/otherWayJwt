@@ -2,9 +2,6 @@ package com.study.otherwayjwt.jwt;
 
 import com.study.otherwayjwt.dto.JwtTokenDto;
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
@@ -26,16 +23,16 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-public class JwtTokenProvider {
+public class JwtTokenProvider2 {
     private final Key key;
 
     // application.properties에서 secret 값을 가져와서 key에 저장
-    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
+    public JwtTokenProvider2(@Value("${jwt.secret}") String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    // Member 정보를 가지고 AccessToken, RefreshToken을 생성하는 메서드
+    // Member 정볼르 가지고 AccessToken, RefreshToken을 생성하는 메서드
     public JwtTokenDto generateToken(Authentication authentication) {
         // 권한 가져오기
         String authorities = authentication.getAuthorities().stream()
