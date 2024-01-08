@@ -5,17 +5,19 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.security.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "memberId")
+    @Column(name = "member_id")
     private long id;
-    @Column(nullable = false)
+    @Column(unique = true)
     private String email;
     @Column(nullable = false)
     private String password;
@@ -26,6 +28,14 @@ public class Member {
     private Authority authority;
     @CreationTimestamp
     private Timestamp createDate;
+
+    @ManyToMany
+    @JoinTable(
+            name = "member_authority",
+            joinColumns = {@JoinColumn(name = "member_id", referencedColumnName = "member_id")},
+            inverseJoinColumns = {@JoinColumn(name = "authority_status", referencedColumnName = "authority_status")}
+        private Set<Authority> authorities = new HashSet<>();
+    )
 
     @Builder
     public Member(String email, String password, String username, Authority authority) {

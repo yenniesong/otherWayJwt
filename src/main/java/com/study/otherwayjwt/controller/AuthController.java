@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/naebang")
+@RequestMapping("/auth")
+//@RequestMapping("/naebang")
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
