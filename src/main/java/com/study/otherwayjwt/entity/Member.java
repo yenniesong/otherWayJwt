@@ -6,7 +6,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.security.Timestamp;
 import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -29,13 +28,13 @@ public class Member {
     @CreationTimestamp
     private Timestamp createDate;
 
-    @ManyToMany
-    @JoinTable(
-            name = "member_authority",
-            joinColumns = {@JoinColumn(name = "member_id", referencedColumnName = "member_id")},
-            inverseJoinColumns = {@JoinColumn(name = "authority_status", referencedColumnName = "authority_status")}
-        private Set<Authority> authorities = new HashSet<>();
-    )
+//    @ManyToMany
+//    @JoinTable(
+//            name = "member_authority",
+//            joinColumns = {@JoinColumn(name = "member_id", referencedColumnName = "member_id")},
+//            inverseJoinColumns = {@JoinColumn(name = "authority_status", referencedColumnName = "authority_status")}
+//        private Set<Authority> authorities = new HashSet<>();
+//    )
 
     @Builder
     public Member(String email, String password, String username, Authority authority) {
@@ -44,4 +43,7 @@ public class Member {
         this.username = username;
         this.authority = authority;
     }
+
+    // 회원 정보 수정
+
 }
