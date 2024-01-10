@@ -1,6 +1,6 @@
 package com.study.otherwayjwt.jwt;
 
-import com.study.otherwayjwt.dto.JwtTokenDto;
+import com.study.otherwayjwt.dto.TokenDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -41,7 +41,7 @@ public class JwtTokenProvider {
     }
 
     // Member 정보를 가지고 AccessToken, RefreshToken을 생성하는 메서드
-    public JwtTokenDto generateToken(Authentication authentication) {
+    public TokenDto generateToken(Authentication authentication) {
         // 권한 가져오기
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -65,11 +65,11 @@ public class JwtTokenProvider {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
-        return JwtTokenDto.builder()
+        return TokenDto.builder()
                 .grantType(BEARER_TYPE)
 //                .grantType("Bearer")
                 .accessToken(accessToken)
-                .accessTokenExpiresIn(accessTokenExpiresIn.getTime())
+                .accessTokenExpiresIn(accessTokenExpiresIn.getTime())   // tokenDto에 추가 안해줘서 에러 났었음
                 .refreshToken(refreshToken)
                 .build();
     }

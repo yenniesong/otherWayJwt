@@ -1,6 +1,6 @@
 package com.study.otherwayjwt.controller;
 
-import com.study.otherwayjwt.dto.JwtTokenDto;
+import com.study.otherwayjwt.dto.TokenDto;
 import com.study.otherwayjwt.dto.MemberRequestDto;
 import com.study.otherwayjwt.dto.MemberResponseDto;
 import com.study.otherwayjwt.dto.TokenRequestDto;
@@ -24,11 +24,11 @@ public class AuthController {
         return ResponseEntity.ok(authService.signup(memberRequestDto));
     }
     @PostMapping("/login")
-    public ResponseEntity<MemberResponseDto> login(@RequestBody MemberRequestDto memberRequestDto){
+    public ResponseEntity<TokenDto> login(@RequestBody MemberRequestDto memberRequestDto){
         return ResponseEntity.ok(authService.login(memberRequestDto));
     }
     @PostMapping("/reissue")
-    public ResponseEntity<JwtTokenDto> reissue(@RequestBody TokenRequestDto tokenRequestDto){
+    public ResponseEntity<TokenDto> reissue(@RequestBody TokenRequestDto tokenRequestDto){
         return ResponseEntity.ok(authService.reissue(tokenRequestDto));
     }
 

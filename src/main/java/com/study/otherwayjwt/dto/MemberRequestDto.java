@@ -33,6 +33,4 @@ public class MemberRequestDto {
         return new UsernamePasswordAuthenticationToken(email, password);
     }
 
-    public MemberResponseDto of(Member save) {
-    }
 }

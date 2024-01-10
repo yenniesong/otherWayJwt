@@ -1,6 +1,6 @@
 package com.study.otherwayjwt.jwt;
 
-import com.study.otherwayjwt.dto.JwtTokenDto;
+import com.study.otherwayjwt.dto.TokenDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -33,7 +33,7 @@ public class JwtTokenProvider2 {
     }
 
     // Member 정볼르 가지고 AccessToken, RefreshToken을 생성하는 메서드
-    public JwtTokenDto generateToken(Authentication authentication) {
+    public TokenDto generateToken(Authentication authentication) {
         // 권한 가져오기
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -55,7 +55,7 @@ public class JwtTokenProvider2 {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
-        return JwtTokenDto.builder()
+        return TokenDto.builder()
                 .grantType("Bearer")
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
