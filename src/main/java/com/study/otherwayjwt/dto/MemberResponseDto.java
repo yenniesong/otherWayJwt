@@ -20,4 +20,8 @@ public class MemberResponseDto {
                 .username(member.getUsername())
                 .build();
     }
+
+    public static MemberResponseDto memberResponseDto(Member member) {
+        return new MemberResponseDto(member.getEmail(), member.getUsername());
+    }
 }

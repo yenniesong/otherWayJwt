@@ -1,7 +1,7 @@
 package com.study.otherwayjwt.config;
 
-import com.study.otherwayjwt.jwt.JwtAuthenticationFilter;
-import com.study.otherwayjwt.jwt.JwtTokenProvider;
+import com.study.otherwayjwt.jwt.JwtFilter;
+import com.study.otherwayjwt.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig2 {
-    private final JwtTokenProvider jwtTokenProvider;
+    private final TokenProvider tokenProvider;
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -45,7 +45,7 @@ public class SecurityConfig2 {
                 .anyRequest().authenticated()
                 .and()
                 // JWT 인증을 위하여 직접 구현한 필터를 UsernamePasswordAuthenticationFilter 전에 실행
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider)
+                .addFilterBefore(new JwtFilter(tokenProvider)
                         , UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

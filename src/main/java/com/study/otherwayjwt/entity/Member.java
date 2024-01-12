@@ -5,7 +5,6 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.security.Timestamp;
-import java.util.HashSet;
 
 @Entity
 @Getter
@@ -22,19 +21,10 @@ public class Member {
     private String password;
     @Column(nullable = false)
     private String username;
-    private String profileImg;
     @Enumerated(EnumType.STRING)
     private Authority authority;
     @CreationTimestamp
     private Timestamp createDate;
-
-//    @ManyToMany
-//    @JoinTable(
-//            name = "member_authority",
-//            joinColumns = {@JoinColumn(name = "member_id", referencedColumnName = "member_id")},
-//            inverseJoinColumns = {@JoinColumn(name = "authority_status", referencedColumnName = "authority_status")}
-//        private Set<Authority> authorities = new HashSet<>();
-//    )
 
     @Builder
     public Member(String email, String password, String username, Authority authority) {

@@ -2,14 +2,9 @@ package com.study.otherwayjwt.dto;
 
 import com.study.otherwayjwt.entity.Authority;
 import com.study.otherwayjwt.entity.Member;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.Set;
 
 @Data
 @AllArgsConstructor

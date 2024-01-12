@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -18,7 +17,7 @@ import org.springframework.web.filter.CorsFilter;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final JwtTokenProvider jwtTokenProvider;
+    private final TokenProvider tokenProvider;
     private final CorsFilter corsFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
@@ -52,12 +51,12 @@ public class SecurityConfig {
             .and()
             .authorizeRequests()
             // 해당 API에 대해서는 모든 요청을 허가
-            .antMatchers("/auth/**").permitAll()
+            .antMatchers("/api/auth/**").permitAll()
             // 이 밖에 모든 요청에 대해서 인증을 필요로 한다는 설정
             .anyRequest().authenticated()
             .and()
-            // JjwtAuthenticationFilter를 addFilterBefore로 등록했던 JwtSecurityConfig 클래스를 적용
-            .apply(new JwtSecurityConfig(jwtTokenProvider));
+            // JwtFilter를 addFilterBefore로 등록했던 JwtSecurityConfig 클래스를 적용
+            .apply(new JwtSecurityConfig(tokenProvider));
         return http.build();
     }
 }

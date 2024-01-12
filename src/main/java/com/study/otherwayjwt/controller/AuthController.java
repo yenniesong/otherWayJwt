@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth")
-//@RequestMapping("/naebang")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
@@ -31,9 +30,5 @@ public class AuthController {
     public ResponseEntity<TokenDto> reissue(@RequestBody TokenRequestDto tokenRequestDto){
         return ResponseEntity.ok(authService.reissue(tokenRequestDto));
     }
-
-
-
-
 
 }

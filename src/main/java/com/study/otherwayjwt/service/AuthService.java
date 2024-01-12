@@ -6,7 +6,7 @@ import com.study.otherwayjwt.dto.MemberResponseDto;
 import com.study.otherwayjwt.dto.TokenRequestDto;
 import com.study.otherwayjwt.entity.Member;
 import com.study.otherwayjwt.entity.RefreshToken;
-import com.study.otherwayjwt.jwt.JwtTokenProvider;
+import com.study.otherwayjwt.jwt.TokenProvider;
 import com.study.otherwayjwt.repository.MemberRepository;
 import com.study.otherwayjwt.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +23,12 @@ public class AuthService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
+    /*
+    * 회원가입
+    * */
     @Transactional
     public MemberResponseDto signup(MemberRequestDto memberRequestDto){
         if (memberRepository.existsByEmail(memberRequestDto.getEmail())){
@@ -35,6 +38,9 @@ public class AuthService {
         return MemberResponseDto.of(memberRepository.save(member));
     }
 
+    /*
+    * 로그인
+    * */
     @Transactional
     public TokenDto login(MemberRequestDto memberRequestDto){
         // 1. login id, pwd를 기반으로 AuthenticationToken 생성
@@ -43,7 +49,7 @@ public class AuthService {
         //    authenticate 메서드가 실행이 될 때 CustomUserDetailsService에서 만들었던 loadUserByUsername 메서드가 실행됨
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
-        TokenDto tokenDto = jwtTokenProvider.generateToken(authentication);
+        TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
         // 4. RefreshToken 저장
         RefreshToken refreshToken = RefreshToken.builder()
                 .key(authentication.getName())
@@ -54,14 +60,17 @@ public class AuthService {
         return tokenDto;
     }
 
+    /*
+    * 토큰 재발급
+    * */
     @Transactional
     public TokenDto reissue(TokenRequestDto tokenRequestDto) {
-        // 1. Refresh Token 검증
-        if (!jwtTokenProvider.vaildateToken(tokenRequestDto.getRefreshToken())) {
+        // 1. Refresh Token 검증 (vaildateToken() : 토큰 검증)
+        if (!tokenProvider.vaildateToken(tokenRequestDto.getRefreshToken())) {
             throw new RuntimeException("Refresh Token이 유효하지 않습니다.");
         }
         // 2. Access Token에서 id(member_id) 가져오기
-        Authentication authentication = jwtTokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
+        Authentication authentication = tokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
         // 3. 저장소에서 id(member ID)를 기반으로 RefreshToken 값을 가져옴
         RefreshToken refreshToken = refreshTokenRepository.findByKey(authentication.getName())
                 .orElseThrow(()-> new RuntimeException("로그아웃 된 사용자입니다."));
@@ -70,7 +79,7 @@ public class AuthService {
             throw new RuntimeException("토큰의 유저 정보가 일치하지 않습니다.");
         }
         // 5. 새로운 토큰 생성
-        TokenDto tokenDto = jwtTokenProvider.generateToken(authentication);
+        TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
         // 6. 저장소 정보 업데이트
         RefreshToken newRefreshToken = refreshToken.updateValue(tokenDto.getRefreshToken());
         refreshTokenRepository.save(newRefreshToken);
